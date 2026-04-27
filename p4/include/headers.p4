@@ -67,7 +67,7 @@ header netlock_t {
 }
 
 struct headers_t {
-    ethernet_t eth;
+    ethernet_t ethernet;
     ipv4_t ipv4;
     udp_t udp;
     bth_t bth;
@@ -75,6 +75,27 @@ struct headers_t {
     netlock_t netlock;
 }
 
-struct metadata_t {}
+struct metadata_t {
+    bit<3> lock_state;
+    bit<16> tenant_id;
+    bit<13> queue_base;
+    bit<13> queue_head;
+    bit<13> queue_tail;
+    bit<13> queue_depth;
+    bit<13> queue_occupancy;
+    bit<16> current_lock_holder_id;
+    bit<32> queue_slot;
+}
+
+struct lock_queue_t {
+    bit<16> tenant_id;
+    bit<32> transaction_id;
+    bit<32> priority;
+    bit<16> seq_num;
+    mac_addr_t src_mac;
+    ipv4_addr_t src_ip;
+    bit<24> src_qp;
+    bit<9> ingress_port;
+}
 
 #endif

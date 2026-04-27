@@ -3,8 +3,8 @@
 
 #include <core.p4>
 #include <v1model.p4>
-#include "constants.p4"
-#include "headers.p4"
+#include "../include/constants.p4"
+#include "../include/headers.p4"
 
 parser NetlockParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t smeta) {
     state start { 
