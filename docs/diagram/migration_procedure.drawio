@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram id="G5M8F8D_VQaZECKDn_6x" name="migration_procedure">
-    <mxGraphModel dx="1717" dy="1118" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1670" dy="1172" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -94,6 +94,109 @@
         </mxCell>
         <mxCell id="mClnJ5PoRewT9Q57f56x-28" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Courier New;fontStyle=1" value="&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;1. Switch Memory &lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;Usage&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;2. Miss Ratio&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 15px;&quot;&gt;3. Queue Overflow&lt;/font&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="95" width="180" x="555.5" y="262.5" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-30" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;fontFamily=Courier New;fontStyle=1" value="&lt;div style=&quot;background-color: rgb(255, 255, 254); line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-size: 14px; font-weight: normal;&quot;&gt;Statistics Collection&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="46" width="230" x="214" y="867" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-3" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Courier New;fontStyle=1" target="m6-Lck-YghVpF-hLRwDS-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Courier New;fontStyle=1" value="&lt;font style=&quot;font-weight: normal; font-size: 20px;&quot;&gt;Requests&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="150" x="254" y="768" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-29" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;dashed=1;dashPattern=1 4;" target="m6-Lck-YghVpF-hLRwDS-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-32" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-34" connectable="0" parent="m6-Lck-YghVpF-hLRwDS-32" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Check the system loss" vertex="1">
+          <mxGeometry relative="1" x="0.3275" as="geometry">
+            <mxPoint x="6" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1" value="&lt;font style=&quot;font-size: 14px; font-weight: normal;&quot;&gt;&lt;font&gt;Loss&amp;nbsp;&lt;/font&gt;Calculator&lt;/font&gt;" vertex="1">
+          <mxGeometry height="48.75" width="203" x="227.5" y="974.38" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-35" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-36" connectable="0" parent="m6-Lck-YghVpF-hLRwDS-35" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Check per lock loss" vertex="1">
+          <mxGeometry relative="1" x="-0.0245" y="2" as="geometry">
+            <mxPoint x="-1" y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-39" connectable="0" parent="m6-Lck-YghVpF-hLRwDS-35" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="False" vertex="1">
+          <mxGeometry relative="1" x="-0.0431" y="-3" as="geometry">
+            <mxPoint y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-37" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="m6-Lck-YghVpF-hLRwDS-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-38" connectable="0" parent="m6-Lck-YghVpF-hLRwDS-37" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="True" vertex="1">
+          <mxGeometry relative="1" x="-0.0758" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-10" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1;fontSize=14;" value="&lt;font style=&quot;font-weight: normal;&quot;&gt;Loss &amp;gt;&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Threshold&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="120" x="269" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-12" parent="1" style="rhombus;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1;fontSize=14;" value="&lt;font style=&quot;font-weight: normal;&quot;&gt;Loss &amp;gt;&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Threshold&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="120" x="516" y="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-43" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1" value="&lt;div style=&quot;background-color: rgb(255, 255, 254); font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Knapsack&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;background-color: rgb(255, 255, 254); font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Optimization&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="269" y="1310" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-42" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1" value="&lt;div style=&quot;background-color: rgb(255, 255, 254); font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Best-Fit&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;background-color: rgb(255, 255, 254); font-size: 14px; line-height: 19px; white-space: pre;&quot;&gt;&lt;font style=&quot;font-weight: normal;&quot;&gt;Algorithm&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="518.5" y="1310" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-44" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1" value="&lt;font style=&quot;font-size: 14px; font-weight: normal;&quot;&gt;Migrate Single Lock&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="111.5" x="522.75" y="1470" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-46" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-24" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1;align=center;" value="&lt;font style=&quot;font-weight: normal; font-size: 14px;&quot;&gt;Re-distribute Switch Memory&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="269" y="1470" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-47" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="m6-Lck-YghVpF-hLRwDS-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="1645" />
+              <mxPoint x="170" y="890" />
+            </Array>
+            <mxPoint x="140" y="1080" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-26" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Courier New;fontStyle=1" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;font&gt;Update Switch&amp;nbsp;&lt;/font&gt;Lock Table&lt;/font&gt;&lt;/span&gt;" vertex="1">
+          <mxGeometry height="50" width="250" x="330" y="1620" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-27" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fontFamily=Courier New;fontStyle=1" value="" vertex="1">
+          <mxGeometry height="72.5" width="204" x="474" y="962.51" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-28" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontFamily=Courier New;fontStyle=1" value="&lt;div&gt;&lt;font style=&quot;font-weight: normal; font-size: 14px;&quot;&gt;1. Switch Memory Usage&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-weight: normal; font-size: 14px;&quot;&gt;2. Miss Ratio&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-weight: normal; font-size: 14px;&quot;&gt;3. Queue Overflow&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="51.25" width="199" x="479" y="973.76" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-40" edge="1" parent="1" source="m6-Lck-YghVpF-hLRwDS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.479;entryY=0.167;entryDx=0;entryDy=0;entryPerimeter=0;" target="m6-Lck-YghVpF-hLRwDS-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="m6-Lck-YghVpF-hLRwDS-41" connectable="0" parent="m6-Lck-YghVpF-hLRwDS-40" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="True" vertex="1">
+          <mxGeometry relative="1" x="-0.1446" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
