@@ -30,7 +30,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/workspace \
             -w /workspace \
-            p4lang/p4c:latest \
+            opennetworking/p4c:latest \
             sh -c "p4c-bm2-ss p4/leaf/leaf.p4 \
               --p4runtime-files build/leaf.p4info.txt \
               --p4runtime-format text \
