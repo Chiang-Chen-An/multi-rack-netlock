@@ -145,25 +145,30 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
     }
 
     apply {
+        meta.use_ipv4_forward = 0;
+
         if (!hdr.netlock.isValid()) {
-            ipv4_forward.apply();
-            return;
+            meta.use_ipv4_forward = 1;
         }
-        // check if the lock is in the current rack
-        // TODO: How to map a key to the lock id in a kv storage system?
-        if ((bit<4>)(hdr.netlock.lock_id & RACK_ID_MASK) != current_rack_id) {
-            // TODO: forward to spine switch when multi-rack
+        else {
+            // check if the lock is in the current rack
+            // TODO: How to map a key to the lock id in a kv storage system?
+            if ((bit<4>)(hdr.netlock.lock_id & RACK_ID_MASK) != current_rack_id) {
+                // TODO: forward to spine switch when multi-rack
+                meta.use_ipv4_forward = 1;
+            }
+        }
+
+        if (meta.use_ipv4_forward == 1) {
             ipv4_forward.apply();
             return;
         }
 
         read_lock_information();
         meta.lock_state = 0;
+        lock_state.apply();
 
         if (hdr.netlock.op_type == ACQUIRED) {
-            // Look up the table for the lock state
-            lock_state.apply();
-
             if (meta.lock_state == HOT_FREE) {
                 if (meta.queue_depth == 0) {
                     forward_to_lock_server();
@@ -210,9 +215,6 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
             }
         }
         else if (hdr.netlock.op_type == RELEASE) {
-            // Look up the table for the lock state
-            lock_state.apply();
-
             if (meta.lock_state == HOT_FREE) {
                 drop();
             }
