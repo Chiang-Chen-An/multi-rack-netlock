@@ -21,7 +21,7 @@ jobs:
   compile-p4:
     runs-on: ubuntu-latest
     container:
-      image: p4lang/p4c:1.2.5.11
+      image: opennetworking/p4c:latest
 
     steps:
       - name: Checkout repository
