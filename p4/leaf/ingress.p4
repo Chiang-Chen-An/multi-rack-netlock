@@ -94,7 +94,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         queue_src_qp.write(meta.queue_slot, hdr.deth.src_qp);
         queue_ingress_port.write(meta.queue_slot, smeta.ingress_port);
 
-        mark_to_drop();
+        mark_to_drop(smeta);
         return;
     }
 
@@ -104,7 +104,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
             return;
         }
         lock_holder.write(hdr.netlock.lock_id, 0);
-        mark_to_drop();
+        mark_to_drop(smeta);
         return;
     }
 
@@ -184,7 +184,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
     }
 
     apply {
-        if (!hdr.netlock.isvalid()) {
+        if (!hdr.netlock.isValid()) {
             ipv4_forward.apply();
             return;
         }
