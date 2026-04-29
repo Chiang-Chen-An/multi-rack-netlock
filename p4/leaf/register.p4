@@ -5,7 +5,6 @@
 register<bit<16>>(TOTAL_SLOTS) queue_tenant_id;
 register<bit<32>>(TOTAL_SLOTS) queue_transaction_id;
 register<bit<32>>(TOTAL_SLOTS) queue_priority;
-register<bit<16>>(TOTAL_SLOTS) queue_seq_num;
 register<mac_addr_t>(TOTAL_SLOTS) queue_src_mac;
 register<ipv4_addr_t>(TOTAL_SLOTS) queue_src_ip;
 register<bit<24>>(TOTAL_SLOTS) queue_src_qp;

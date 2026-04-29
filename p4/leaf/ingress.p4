@@ -33,7 +33,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         lock_holder.read(meta.current_lock_holder_id, hdr.netlock.lock_id);
     }
 
-    action make_grant_package(){
+    action acquire_lock() {
         mac_addr_t tmp_mac    = hdr.ethernet.src_addr;
         hdr.ethernet.src_addr = hdr.ethernet.dst_addr;
         hdr.ethernet.dst_addr = tmp_mac;
@@ -49,67 +49,37 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         hdr.netlock.op_type = GRANT;
 
         smeta.egress_spec = smeta.ingress_port;
-    }
-
-    action acquire_lock() {
-        if (meta.queue_depth == 0) {
-            forward_to_lock_server();
-            return;
-        }
-
         // update lock holder
         lock_holder.write(hdr.netlock.lock_id, hdr.netlock.tenant_id);
-        
-        // reply a grant package
-        make_grant_package();
 
         // TODO: update lock state to HOT_HELD
     }
 
     action enqueue_lock_request() {
-        bit<13> next_tail = meta.queue_tail + 1;
-
-        if ((meta.queue_depth == 0) || (meta.queue_occupancy >= meta.queue_depth)) {
-            forward_to_lock_server();
-            return;
-        }
-
-        if (next_tail >= meta.queue_depth) {
-            next_tail = 0;
-        }
-
         meta.queue_slot = (bit<32>)(meta.queue_base + meta.queue_tail);
 
         // update lock queue info
-        lock_queue_tail.write(hdr.netlock.lock_id, next_tail);
+        lock_queue_tail.write(hdr.netlock.lock_id, meta.next_queue_tail);
         lock_queue_occupancy.write(hdr.netlock.lock_id, meta.queue_occupancy + 1);
 
         // store requester tenant_id
         queue_tenant_id.write(meta.queue_slot, hdr.netlock.tenant_id);
         queue_transaction_id.write(meta.queue_slot, hdr.netlock.transaction_id);
         queue_priority.write(meta.queue_slot, hdr.netlock.priority);
-        // queue_seq_num.write(meta.queue_slot, hdr.netlock.)
         queue_src_mac.write(meta.queue_slot, hdr.ethernet.src_addr);
         queue_src_ip.write(meta.queue_slot, hdr.ipv4.src_addr);
         queue_src_qp.write(meta.queue_slot, hdr.deth.src_qp);
         queue_ingress_port.write(meta.queue_slot, smeta.ingress_port);
 
         mark_to_drop(smeta);
-        return;
     }
 
     action release_lock() {
-        if (meta.current_lock_holder_id != hdr.netlock.tenant_id) {
-            mark_to_drop(smeta);
-            return;
-        }
         lock_holder.write(hdr.netlock.lock_id, 0);
         mark_to_drop(smeta);
-        return;
     }
 
     action grant_next_waiter() {
-        bit<13> next_head = meta.queue_head + 1;
         bit<16> next_tenant_id;
         bit<32> next_transaction_id;
         bit<32> next_priority;
@@ -120,15 +90,6 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         mac_addr_t grant_src_mac = hdr.ethernet.dst_addr;
         ipv4_addr_t grant_src_ip = hdr.ipv4.dst_addr;
         bit<24> grant_src_qp = hdr.bth.dest_qp;
-
-        if (meta.queue_occupancy == 0) {
-            release_lock();
-            return;
-        }
-
-        if (next_head >= meta.queue_depth) {
-            next_head = 0;
-        }
 
         meta.queue_slot = (bit<32>)(meta.queue_base + meta.queue_head);
 
@@ -141,7 +102,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         queue_ingress_port.read(next_ingress_port, meta.queue_slot);
 
         lock_holder.write(hdr.netlock.lock_id, next_tenant_id);
-        lock_queue_head.write(hdr.netlock.lock_id, next_head);
+        lock_queue_head.write(hdr.netlock.lock_id, meta.next_queue_head);
         lock_queue_occupancy.write(hdr.netlock.lock_id, meta.queue_occupancy - 1);
 
         hdr.ethernet.src_addr = grant_src_mac;
@@ -190,19 +151,24 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         }
         // check if the lock is in the current rack
         // TODO: How to map a key to the lock id in a kv storage system?
-        if ((bit<4>)(hdr.netlock.lock_id % (bit<32>)TOTAL_RACKS_NUM) != current_rack_id) {
+        if ((bit<4>)(hdr.netlock.lock_id & RACK_ID_MASK) != current_rack_id) {
             // TODO: forward to spine switch when multi-rack
             ipv4_forward.apply();
             return;
         }
 
         read_lock_information();
+        meta.lock_state = 0;
 
         if (hdr.netlock.op_type == ACQUIRED) {
             // Look up the table for the lock state
             lock_state.apply();
 
             if (meta.lock_state == HOT_FREE) {
+                if (meta.queue_depth == 0) {
+                    forward_to_lock_server();
+                    return;
+                }
                 acquire_lock();
                 return;
             }
@@ -213,6 +179,10 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                     return;
                 }
                 // TODO: if the lock server is not empty, handle the request from lock server first.
+                meta.next_queue_tail = meta.queue_tail + 1;
+                if (meta.next_queue_tail >= meta.queue_depth) {
+                    meta.next_queue_tail = 0;
+                }
                 enqueue_lock_request();
             }
             else if (meta.lock_state == COLD) {
@@ -225,6 +195,10 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                     return;
                 }
                 else {
+                    meta.next_queue_tail = meta.queue_tail + 1;
+                    if (meta.next_queue_tail >= meta.queue_depth) {
+                        meta.next_queue_tail = 0;
+                    }
                     enqueue_lock_request();
                 }
             }
@@ -232,7 +206,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                 forward_to_lock_server();
             }
             else {
-                mark_to_drop(smeta);
+                drop();
             }
         }
         else if (hdr.netlock.op_type == RELEASE) {
@@ -240,10 +214,24 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
             lock_state.apply();
 
             if (meta.lock_state == HOT_FREE) {
-                mark_to_drop(smeta);
+                drop();
             }
             else if (meta.lock_state == HOT_HELD) {
-                grant_next_waiter();
+                if (meta.current_lock_holder_id != hdr.netlock.tenant_id) {
+                    drop();
+                    return;
+                }
+                if (meta.queue_occupancy == 0) {
+                    release_lock();
+                    return;
+                }
+                else {
+                    meta.next_queue_head = meta.queue_head + 1;
+                    if (meta.next_queue_head >= meta.queue_depth) {
+                        meta.next_queue_head = 0;
+                    }
+                    grant_next_waiter();
+                }
             }
             else if (meta.lock_state == COLD) {
                 forward_to_lock_server();
@@ -253,15 +241,29 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                 forward_to_lock_server();
             }
             else if (meta.lock_state == DRAINING) {
-                grant_next_waiter();
+                if (meta.current_lock_holder_id != hdr.netlock.tenant_id) {
+                    drop();
+                    return;
+                }
+                if (meta.queue_occupancy == 0) {
+                    release_lock();
+                    return;
+                }
+                else {
+                    meta.next_queue_head = meta.queue_head + 1;
+                    if (meta.next_queue_head >= meta.queue_depth) {
+                        meta.next_queue_head = 0;
+                    }
+                    grant_next_waiter();
+                }
                 // TODO: check if queue is empty, if so, notify server
             }
             else {
-                mark_to_drop(smeta);
+                drop();
             }
         }
         else {
-            mark_to_drop(smeta);
+            drop();
         }
     }
 }

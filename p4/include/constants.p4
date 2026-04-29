@@ -23,6 +23,8 @@ const bit<8> GRANT = 3;
 const bit<32> TOTAL_SLOTS = 4096;
 const bit<32> TOTAL_LOCKS_NUM = 4096;
 const bit<4> TOTAL_RACKS_NUM = 8;
+// TOTAL_RACKS_NUM is a power of two, so use a mask instead of modulo for target compatibility.
+const bit<32> RACK_ID_MASK = ((bit<32>)TOTAL_RACKS_NUM) - 1;
 
 // NOTE: change this to the cuurent rack_id
 const bit<4> current_rack_id = 1;
