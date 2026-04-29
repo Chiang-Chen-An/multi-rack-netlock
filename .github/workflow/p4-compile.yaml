@@ -1,0 +1,45 @@
+# .github/workflows/p4-compile.yml
+name: Compile P4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.p4"
+      - ".github/workflows/p4-compile.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.p4"
+      - ".github/workflows/p4-compile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile-p4:
+    runs-on: ubuntu-latest
+    container:
+      image: p4lang/p4c:latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show p4c version
+        run: p4c --version
+
+      - name: Compile leaf P4 to BMv2 JSON and P4Info
+        run: |
+          mkdir -p build
+          p4c-bm2-ss p4/leaf/leaf.p4 \
+            --p4runtime-files build/main.p4info.txt \
+            --p4runtime-format text \
+            -o build/main.json
+
+      - name: Upload compiled artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: p4-build-output
+          path: build/
