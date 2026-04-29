@@ -21,7 +21,7 @@ jobs:
   compile-p4:
     runs-on: ubuntu-latest
     container:
-      image: p4lang/p4c:latest
+      image: p4lang/p4c:1.2.5.11
 
     steps:
       - name: Checkout repository
@@ -34,9 +34,9 @@ jobs:
         run: |
           mkdir -p build
           p4c-bm2-ss p4/leaf/leaf.p4 \
-            --p4runtime-files build/main.p4info.txt \
+            --p4runtime-files build/leaf.p4info.txt \
             --p4runtime-format text \
-            -o build/main.json
+            -o build/leaf.json
 
       - name: Upload compiled artifacts
         uses: actions/upload-artifact@v4
