@@ -1,0 +1,14 @@
+{
+  "switches": [
+    {
+      "name": "leaf1",
+      "device_id": 1,
+      "grpc_addr": "127.0.0.1:50001",
+      "election_id": [0, 1],
+      "pipeline": {
+        "p4info_path": "build/leaf.p4info.txt",
+        "bmv2_json_path": "build/leaf.json"
+      }
+    }
+  ]
+}
