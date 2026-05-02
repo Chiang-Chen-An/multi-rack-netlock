@@ -18,4 +18,9 @@ register<bit<13>>(TOTAL_LOCKS_NUM) lock_queue_tail;       // offset of next slot
 register<bit<13>>(TOTAL_LOCKS_NUM) lock_queue_depth;      // number of slots owned by this lock
 register<bit<13>>(TOTAL_LOCKS_NUM) lock_queue_occupancy;  // queued requests in this lock's slice
 
+// statistic
+register<bit<32>>(TOTAL_LOCKS_NUM) lock_acquire_count;
+register<bit<32>>(TOTAL_LOCKS_NUM) lock_miss_count;
+register<bit<32>>(TOTAL_LOCKS_NUM) lock_overflow_count;
+
 #endif

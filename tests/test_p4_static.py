@@ -65,6 +65,9 @@ class P4StaticContractTests(unittest.TestCase):
             "lock_queue_tail",
             "lock_queue_depth",
             "lock_queue_occupancy",
+            "lock_acquire_count",
+            "lock_miss_count",
+            "lock_overflow_count",
         ]
         for register in metadata_registers:
             self.assertRegex(registers, rf"register<.+>\(TOTAL_LOCKS_NUM\)\s+{register};")

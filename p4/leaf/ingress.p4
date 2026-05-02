@@ -145,6 +145,7 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
     }
 
     apply {
+        bit<32> tmp_count;
         meta.use_ipv4_forward = 0;
 
         if (!hdr.netlock.isValid()) {
@@ -169,6 +170,8 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
         lock_state.apply();
 
         if (hdr.netlock.op_type == ACQUIRED) {
+            lock_acquire_count.read(tmp_count, hdr.netlock.lock_id);
+            lock_acquire_count.write(hdr.netlock.lock_id, tmp_count + 1);
             if (meta.lock_state == HOT_FREE) {
                 if (meta.queue_depth == 0) {
                     forward_to_lock_server();
@@ -180,6 +183,8 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
             else if (meta.lock_state == HOT_HELD) {
                 if ((meta.queue_depth == 0) || (meta.queue_occupancy >= meta.queue_depth)) {
                     // queue full, forward to lock_server;
+                    lock_overflow_count.read(tmp_count, hdr.netlock.lock_id);
+                    lock_overflow_count.write(hdr.netlock.lock_id, tmp_count + 1);
                     forward_to_lock_server();
                     return;
                 }
@@ -191,6 +196,8 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                 enqueue_lock_request();
             }
             else if (meta.lock_state == COLD) {
+                lock_miss_count.read(tmp_count, hdr.netlock.lock_id);
+                lock_miss_count.write(hdr.netlock.lock_id, tmp_count + 1);
                 forward_to_lock_server();
                 return;
             }
@@ -208,6 +215,8 @@ control NetlockIngress(inout headers_t hdr, inout metadata_t meta, inout standar
                 }
             }
             else if (meta.lock_state == DRAINING) {
+                lock_miss_count.read(tmp_count, hdr.netlock.lock_id);
+                lock_miss_count.write(hdr.netlock.lock_id, tmp_count + 1);
                 forward_to_lock_server();
             }
             else {

@@ -42,6 +42,8 @@ class SwitchConfig:
     device_id: int = 1
     grpc_addr: str = "127.0.0.1:50001"
     election_id: tuple[int, int] = (0, 1)
+    thrift_port: int | None = 9090
+    push_pipeline: bool = True
     pipeline: PipelineConfig = field(default_factory=PipelineConfig)
 
     @classmethod
@@ -55,6 +57,12 @@ class SwitchConfig:
             device_id=int(raw.get("device_id", 1)),
             grpc_addr=str(raw.get("grpc_addr", "127.0.0.1:50001")),
             election_id=(int(election_id[0]), int(election_id[1])),
+            thrift_port=(
+                int(raw["thrift_port"])
+                if raw.get("thrift_port") is not None
+                else None
+            ),
+            push_pipeline=bool(raw.get("push_pipeline", True)),
             pipeline=PipelineConfig.from_dict(raw.get("pipeline", {})),
         )
 
@@ -63,7 +71,10 @@ class SwitchConfig:
             raise ValueError(f"{self.name}: device_id must be non-negative")
         if not self.grpc_addr:
             raise ValueError(f"{self.name}: grpc_addr must not be empty")
-        self.pipeline.validate()
+        if self.thrift_port is not None and not (0 < self.thrift_port < 65536):
+            raise ValueError(f"{self.name}: thrift_port must be in range 1..65535")
+        if self.push_pipeline:
+            self.pipeline.validate()
 
 
 @dataclass(frozen=True)
