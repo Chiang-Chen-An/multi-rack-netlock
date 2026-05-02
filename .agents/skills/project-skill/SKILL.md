@@ -164,3 +164,4 @@ description: This skill is to instruct the agents how to implement this project,
     │
     └── .gitignore
    ```
+4. The agent can test the program on a vm, which can be accessed by ssh p4-switch. The agent should use `scp` to copy the code to the vm. The agent have full privilege on the vm, and can use any command including `sudo` with no password.
