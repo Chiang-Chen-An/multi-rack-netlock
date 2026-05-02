@@ -19,3 +19,6 @@ shell:
 		-w /workspace \
 		$(P4C_IMAGE) \
 		bash
+
+test:
+	python3 -m unittest discover -s tests
