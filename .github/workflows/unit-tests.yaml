@@ -35,5 +35,8 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install test dependencies
+        run: python3 -m pip install scapy
+
       - name: Run unit tests
         run: make test
